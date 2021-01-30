@@ -1,0 +1,68 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 8px;
+    column-gap: 15px;
+  }
+  .grid-item{
+    justify-self: stretch;
+  }
+  .span-title{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px; 
+    font-weight: 300;
+  }
+  .book-content{
+    padding-top: 12px;
+  }
+  .card .card-image {
+      padding: 8px;
+  }
+  .book-img{
+      height: 100% !important;
+      width: 100% !important;
+  }
+
+  .item-i{
+      grid-area: image;
+  }
+  .item-b{
+    grid-area: body;
+    padding-top:8px;
+  }
+  .item-f{
+        grid-area: footer;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        display: flex;
+        justify-content: flex-end;
+  }
+  .footer-content{
+      display:flex;
+      padding-right: 8px;
+      width: 77px;
+      justify-content: space-between;
+  }
+
+  .modal .modal-content {
+    padding: 10px !important;
+}
+
+  .card-c{
+      display: grid;
+      padding: 4px;
+      height: 220px !important;
+      grid-template-columns: 1.5fr 2.5fr;
+      grid-template-rows: auto;
+      grid-template-areas:
+      "image body"
+      "image body"
+      "image footer";
+  }
+
+  .card-l{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 220px !important;
+  }

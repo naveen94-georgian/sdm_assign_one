@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    </link>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="grid-container">
+        {% for book in books %}
+        <div class="grid-item">
+            <div class="card card-c">
+                <div class="card-image item-i">
+                    <img class="book-img"
+                        src="{{ url_for('static', filename='images/amazon_scrapper/' + book.img_name) }}"
+                        alt="{{ img_name }}">
+                </div>
+                <div class="item-b">
+                    <span class="span-title">{{ book.title }}</span>
+                    <div class="book-content">
+                        <span class="span-content"></span>
+                        <b>Author: </b>{{ book.author }}<br>
+                        <b>Format: </b>{{ book.format }}<br>
+                        <b>Rating: </b>{{ book.rating }} ({{ book.num_of_reviews }})<br>
+                        <b>Price: </b>{{ book.price }}
+                        </span>
+                    </div>
+
+                </div>
+                <div class="item-f">
+                    <div class="footer-content">
+                        <input type="hidden" class="inp_data" value="{{ book.to_json() }}">
+                        <a class="btn-floating btn-small waves-effect waves-light btn-edit "><i
+                                class="material-icons">edit</i></a>
+                        <a class="btn-floating btn-small waves-effect waves-light btn-delete "><i
+                                class="material-icons">delete</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="grid-item">
+            <div class="card card-l">
+                <a class="card-image" id="btn_add" style="cursor: pointer;">
+                    <img style="height: 80px;width: 80px;"
+                    src="{{ url_for('static', filename='images/other/add_circle_outline2.png') }}" 
+                    alt="add_circle">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4 id="op_title">Edit:</h4>
+            <div class="input-field">
+                <input id="em_title" type="text" >
+                <label for="em_title">Title</label>
+            </div>
+            <div class="input-field ">
+                <input id="em_author" type="text" >
+                <label for="em_author">Author</label>
+            </div>
+            <div class="input-field ">
+                <input id="em_format" type="text" >
+                <label for="em_format">Format</label>
+            </div>
+            <div class="input-field ">
+                <input id="em_price" type="text" >
+                <label for="em_price">Price</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btn_cancel" class="waves-effect waves-light btn-flat btn-small">Cancel</a>
+            <a id="btn_save" class="waves-effect waves-light btn-small">Update</a>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+
+</html>
