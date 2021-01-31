@@ -4,12 +4,15 @@ from PIL import Image
 import tempfile, os, gridfs
 from model.book import smd_amazon_col
 from views import views
+from shutil import copyfile
 
 def init_flask_app():
     """
     Creating a folder in the tempdir to temporarily store the image data scraped from the amazon.ca website.
     """
     temp_path = 'static\\images\\amazon_scrapper'
+    default_image = 'static\\images\\other\\default.jpg'
+   
     if not os.path.exists(temp_path):
         os.makedirs(temp_path)
     
@@ -20,6 +23,7 @@ def init_flask_app():
     for f in filelist:
         os.remove(os.path.join(temp_path, f))
 
+    copyfile(default_image, temp_path+'\\default.jpg')
     print('temp_path: '+ temp_path)
     """
     Loading data during app startup 

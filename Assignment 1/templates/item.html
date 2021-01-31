@@ -1,0 +1,43 @@
+<div class="grid-container">
+    {% for book in books %}
+    <div class="grid-item">
+        <div class="card card-c">
+            <div class="card-image item-i">
+                <img class="book-img"
+                    src="{{ url_for('static', filename='images/amazon_scrapper/' + book.img_name) }}"
+                    alt="{{ img_name }}">
+            </div>
+            <div class="item-b">
+                <span class="span-title">{{ book.title }}</span>
+                <div class="book-content">
+                    <span class="span-content"></span>
+                    <b>Author: </b>{{ book.author }}<br>
+                    <b>Format: </b>{{ book.format }}<br>
+                    <b>Rating: </b>{{ book.rating }} ({{ book.num_of_reviews }})<br>
+                    <b>Price: </b>{{ book.price }}
+                    </span>
+                </div>
+
+            </div>
+            <div class="item-f">
+                <div class="footer-content">
+                    <input type="hidden" class="inp_data" value="{{ book.to_json() }}">
+                    <a class="btn-floating btn-small waves-effect waves-light btn-edit "><i
+                            class="material-icons">edit</i></a>
+                    <a class="btn-floating btn-small waves-effect waves-light btn-delete "><i
+                            class="material-icons">delete</i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="grid-item">
+        <div class="card card-l">
+            <a class="card-image" id="btn_add" style="cursor: pointer;">
+                <img style="height: 80px;width: 80px;"
+                src="{{ url_for('static', filename='images/other/add_circle_outline2.png') }}" 
+                alt="add_circle">
+            </a>
+        </div>
+    </div>
+</div>
