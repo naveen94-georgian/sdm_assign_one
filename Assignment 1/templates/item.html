@@ -4,8 +4,10 @@
         <div class="card card-c">
             <div class="card-image item-i">
                 <img class="book-img"
-                    src="{{ url_for('static', filename='images/amazon_scrapper/' + book.img_name) }}"
-                    alt="{{ img_name }}">
+                    src="{{ 'static/images/amazon_scrapper/' + book.img_name }}"
+                    alt="{{ img_name }}"
+                    onerror="imgError(this);"
+                    >
             </div>
             <div class="item-b">
                 <span class="span-title">{{ book.title }}</span>
@@ -41,3 +43,10 @@
         </div>
     </div>
 </div>
+<script>
+    function imgError(image) {
+    image.onerror = "";
+    image.src = "static/images/other/default.jpg";
+    return true;
+    }
+</script>
