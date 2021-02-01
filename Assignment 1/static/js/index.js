@@ -73,6 +73,35 @@ function BestSellingBooks(){
     };
 
     /**
+     * setBtnVisible handle the dialog button's visibility
+     * @param {*} btnType 
+     */
+    function setBtnVisible(btnType){
+        switch(btnType){
+            case 'add':
+                $('#btn_create').show();
+                $('#btn_update').hide();
+                $('#btn_delete').hide();
+                break;
+            case 'update':
+                $('#btn_create').hide();
+                $('#btn_update').show();
+                $('#btn_delete').hide();
+                break;
+            case 'delete':
+                $('#btn_create').hide();
+                $('#btn_update').hide();
+                $('#btn_delete').show();
+                break;
+            default:
+                $('#btn_create').show();
+                $('#btn_update').hide();
+                $('#btn_delete').hide();
+                break;
+        }
+    };
+
+    /**
      * The ItemAddDialog functions generates a dialog that performs the Create operation.
      * @param {*} options 
      */
@@ -86,7 +115,7 @@ function BestSellingBooks(){
          */
         ItemAddDialog.prototype.onOpenEnd = () =>{
             $('#op_title').text('Add:');
-            $('#btn_save').text('Add');
+            setBtnVisible('add');
             bindDialogEvents();
         }
 
@@ -97,8 +126,8 @@ function BestSellingBooks(){
             $('input').on('change paste keyup',(e) => {
                 $(e.currentTarget).addClass('modified');
             });
-            $('btn_save').off();
-            $('#btn_save').on('click',(e) => {
+            $('#btn_create').off('click');
+            $('#btn_create').on('click',(e) => {
                 if(!$('#modal1').find('input').hasClass('modified')){
                     M.Toast.dismissAll();
                     M.toast({html: 'No Changes has been made'});
@@ -118,6 +147,12 @@ function BestSellingBooks(){
          */
         function createData(data){
             var deferred = $.Deferred();
+            data = {
+                ...data,
+                rating: '0.0 out of 5 stars',
+                num_of_reviews: '0',
+                img_name: ''
+            };
             $.ajax({
                 contentType: 'application/json',
                 data: JSON.stringify(data),
@@ -161,7 +196,7 @@ function BestSellingBooks(){
          */
         ItemEditDialog.prototype.onOpenEnd = () => {
             $('#op_title').text('Edit:');
-            $('#btn_save').text('Edit');
+            setBtnVisible('update');
             $('#em_title').val(data.title);
             $('#em_author').val(data.author);
             $('#em_format').val(data.format);
@@ -177,8 +212,8 @@ function BestSellingBooks(){
             $('input').on('change paste keyup',(e) => {
                 $(e.currentTarget).addClass('modified');
             });
-            $('btn_save').off();
-            $('#btn_save').on('click',(e) => {
+            $('#btn_update').off('click');
+            $('#btn_update').on('click',(e) => {
                 if(!$('#modal1').find('input').hasClass('modified')){
                     M.Toast.dismissAll();
                     M.toast({html: 'No Changes has been made'});
@@ -239,7 +274,7 @@ function BestSellingBooks(){
          */
         ItemDeleteDialog.prototype.onOpenEnd = () => {
             $('#op_title').text('Delete:');
-            $('#btn_save').text('Delete');
+            setBtnVisible('delete');
             $('#em_title').val(data.title);
             $('#em_author').val(data.author);
             $('#em_format').val(data.format);
@@ -254,8 +289,8 @@ function BestSellingBooks(){
          * bindDialogEvents binds events of the delete dialog components.
          */
         function bindDialogEvents(){
-            $('btn_save').off();
-            $('#btn_save').on('click',(e) => {
+            $('#btn_delete').off('click');
+            $('#btn_delete').on('click',(e) => {
                 deleteData(data)
             });
         }

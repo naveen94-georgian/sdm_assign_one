@@ -24,7 +24,8 @@
             </div>
             <div class="item-f">
                 <div class="footer-content">
-                    <input type="hidden" class="inp_data" value="{{ book.to_json() }}">
+                    <input type="hidden" class="inp_data" value="{{ json_data[loop.index-1] }}">
+                    
                     <a class="btn-floating btn-small waves-effect waves-light btn-edit "><i
                             class="material-icons">edit</i></a>
                     <a class="btn-floating btn-small waves-effect waves-light btn-delete "><i
@@ -46,6 +47,10 @@
 </div>
 <script>
     //imgError sets a default image in case of a image fetch failure.
+
+    function to_json(data){
+        return JSON.stringify(data);
+    };
     function imgError(image) {
     image.onerror = "";
     image.src = "static/images/other/default.jpg";

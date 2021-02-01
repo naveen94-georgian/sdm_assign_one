@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='images/other/favicon.ico') }}" type="image/x-icon"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -54,7 +55,9 @@
         </div>
         <div class="modal-footer">
             <a id="btn_cancel" class="waves-effect modal-close waves-light btn-flat btn-small">Cancel</a>
-            <a id="btn_save" class="waves-effect modal-close waves-light btn-small">Update</a>
+            <a id="btn_create" class="waves-effect modal-close waves-light btn-small">Add</a>
+            <a id="btn_update" class="waves-effect modal-close waves-light btn-small">Update</a>
+            <a id="btn_delete" class="waves-effect modal-close waves-light btn-small">Delete</a>
         </div>
 
     </div>
