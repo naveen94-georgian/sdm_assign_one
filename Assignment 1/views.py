@@ -2,8 +2,6 @@ from flask import Blueprint, render_template, request, make_response, jsonify
 from model.book import Book
 import tempfile
 
-
-
 """
 Creates blueprint to register CRUD endpoints.
 """

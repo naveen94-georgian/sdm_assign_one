@@ -43,6 +43,6 @@ app.register_blueprint(views)
 # initializes the app
 init_flask_app()
 
-app.debug = True
+app.debug = False
 if __name__ == "__main__": 
         app.run()

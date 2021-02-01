@@ -8,6 +8,7 @@ function BestSellingBooks(){
      */
     BestSellingBooks.prototype.init = () => {
         $('.modal').modal();
+        setBtnVisible()
         bindEvents();
     };
 
