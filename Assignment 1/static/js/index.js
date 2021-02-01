@@ -1,16 +1,23 @@
 'use strict'
+/**
+ * The Main javascript function
+ */
 function BestSellingBooks(){
-
+    /**
+     * The init function is called after document on ready and initializes all the events
+     */
     BestSellingBooks.prototype.init = () => {
         $('.modal').modal();
         bindEvents();
     };
 
+    /**
+     * The reloadPage functions reloads the page content after a CRUD operation.
+     */
     function reloadPage(){
         var deferred = $.Deferred();
         var $parent = $('#div_parent');
         $.get('/reload').then((responseData) => {
-            // console.log(responseData);
             $parent.children().remove();
             $parent.append(responseData);
             bindEvents();
@@ -22,15 +29,22 @@ function BestSellingBooks(){
         return deferred.promise();
     };
 
+    /**
+     * The bindEvents functions binds all the events in the page.
+     */
     function bindEvents(){
+        //Shows spinner loader on AJAX calls
         $(document).on({
             ajaxStart: function(){
-               console.log('ajaxStart');
+                 $('#loader').removeClass('hidden');
+                 $('body').addClass('loading');
             },
             ajaxStop: function(){ 
-                console.log('ajaxStart');
+                $('#loader').addClass('hidden');
+                $('body').removeClass('loading');
             }    
         });
+        //bind events to the edit button.
         $('.btn-edit').on('click',(e) => {
             var data = JSON.parse($(e.currentTarget).parent().find('.inp_data').val());
             var dialogOptions = {
@@ -39,6 +53,7 @@ function BestSellingBooks(){
             let dialog = new ItemEditDialog(dialogOptions, data);
             dialog.open();
         });
+        //bind events to the delete button.
         $('.btn-delete').on('click', (e) => {
             var data = JSON.parse($(e.currentTarget).parent().find('.inp_data').val());
             var dialogOptions = {
@@ -47,6 +62,7 @@ function BestSellingBooks(){
             let dialog = new ItemDeleteDialog(dialogOptions, data);
             dialog.open();
         });
+        //binds events to the add button
         $('#btn_add').on('click', (e) => {
             var dialogOptions = {
                 dismissible: false
@@ -56,20 +72,32 @@ function BestSellingBooks(){
         });
     };
 
+    /**
+     * The ItemAddDialog functions generates a dialog that performs the Create operation.
+     * @param {*} options 
+     */
     function ItemAddDialog(options){
         var self =this;
         var data = {};
 
+        /**
+         * The onOpenEnd defines the dialog's title and text and binds the events of 
+         * the dialog components.
+         */
         ItemAddDialog.prototype.onOpenEnd = () =>{
             $('#op_title').text('Add:');
             $('#btn_save').text('Add');
             bindDialogEvents();
         }
 
+        /**
+         * bindDialogEvents binds events to dialog component
+         */
         function bindDialogEvents(){
             $('input').on('change paste keyup',(e) => {
                 $(e.currentTarget).addClass('modified');
             });
+            $('btn_save').off();
             $('#btn_save').on('click',(e) => {
                 if(!$('#modal1').find('input').hasClass('modified')){
                     M.Toast.dismissAll();
@@ -79,15 +107,15 @@ function BestSellingBooks(){
                     data.author = $('#em_author').val();
                     data.format = $('#em_format').val();
                     data.price = $('#em_price').val();
-                    createData(data);
+                    createData(data); // call to create operation
                 }
-            });
-
-            $('#btn_cancel').on('click', () => {
-                dialog.close();
             });
         };
 
+        /**
+         * The createData function creates the document in the mongodb database.
+         * @param {*} data 
+         */
         function createData(data){
             var deferred = $.Deferred();
             $.ajax({
@@ -101,7 +129,7 @@ function BestSellingBooks(){
                 return reloadPage();
             })
             .then(() => {
-                dialog.close();
+                $('#modal_create').modal('open');
                 return deferred.resolve();
             }).fail(() => {
                 return deferred.reject();
@@ -114,14 +142,23 @@ function BestSellingBooks(){
             onOpenEnd: self.onOpenEnd
         };
 
+        //create and returns the base dialog with create options
         var dialog = new ItemDialog(create_options);
         return dialog;
     }
 
+    /**
+     * ItemEditDialog generates a dialog that performs the edit operation.
+     * @param {*} options 
+     * @param {*} data 
+     */
     function ItemEditDialog(options, data){
         var self = this;
-        
 
+        /**
+         * The onOpenEnd defines the dialog's title and text and binds the events of 
+         * the dialog components.
+         */
         ItemEditDialog.prototype.onOpenEnd = () => {
             $('#op_title').text('Edit:');
             $('#btn_save').text('Edit');
@@ -129,15 +166,18 @@ function BestSellingBooks(){
             $('#em_author').val(data.author);
             $('#em_format').val(data.format);
             $('#em_price').val(data.price);
-            console.log(data);
             bindDialogEvents();
             M.updateTextFields()
         };
 
+        /**
+         * bindDialogEvents binds events to dialog component
+         */
         function bindDialogEvents(){
             $('input').on('change paste keyup',(e) => {
                 $(e.currentTarget).addClass('modified');
             });
+            $('btn_save').off();
             $('#btn_save').on('click',(e) => {
                 if(!$('#modal1').find('input').hasClass('modified')){
                     M.Toast.dismissAll();
@@ -147,16 +187,15 @@ function BestSellingBooks(){
                     data.author = $('#em_author').val();
                     data.format = $('#em_format').val();
                     data.price = $('#em_price').val();
-                    updateData(data);
+                    updateData(data); //calls to the update the data in mongodb database
                 }
-            });
-
-            $('#btn_cancel').on('click', () => {
-                console.log('btnCancel clicked')
-                dialog.close();
             });
         };
 
+        /**
+         * updateData updates the document in the mongodb database.
+         * @param {*} data 
+         */
         function updateData(data){
             var deferred = $.Deferred();
             $.ajax({
@@ -170,7 +209,7 @@ function BestSellingBooks(){
                 return reloadPage();
             })
             .then(() => {
-                dialog.close();
+                $('#modal_update').modal('open');
                 return deferred.resolve();
             }).fail(() => {
                 return deferred.reject();
@@ -183,14 +222,21 @@ function BestSellingBooks(){
             onOpenEnd: self.onOpenEnd
         };
 
+        //Creates a dialog with edit options.
         var dialog = new ItemDialog(edit_options);
-    
-        
         return dialog;
     };
 
+    /**
+     * ItemDeleteDialog generates a dialog that deletes a document in the database
+     * @param {*} options 
+     * @param {*} data 
+     */
     function ItemDeleteDialog(options, data){
         var self = this;
+        /**
+         * onOpenEnd initializes and binds the delete dialog components.
+         */
         ItemDeleteDialog.prototype.onOpenEnd = () => {
             $('#op_title').text('Delete:');
             $('#btn_save').text('Delete');
@@ -204,15 +250,20 @@ function BestSellingBooks(){
             M.updateTextFields()
         };
 
+        /**
+         * bindDialogEvents binds events of the delete dialog components.
+         */
         function bindDialogEvents(){
+            $('btn_save').off();
             $('#btn_save').on('click',(e) => {
                 deleteData(data)
             });
-            $('#btn_cancel').on('click', () => {
-                dialog.close();
-            });
         }
 
+        /**
+         * deleteData deletes a document in the mongodb database.
+         * @param {*} data 
+         */
         function deleteData(data){
             var deferred = $.Deferred();
             $.ajax({
@@ -226,7 +277,7 @@ function BestSellingBooks(){
                 return reloadPage();
             })
             .then(() => {
-                dialog.close();
+                $('#modal_delete').modal('open');
                 return deferred.resolve();
             }).fail(() => {
                 return deferred.reject();
@@ -239,20 +290,37 @@ function BestSellingBooks(){
             onOpenEnd: self.onOpenEnd
         };
 
+        //Creates a dialog with delete options
         var dialog = new ItemDialog(delete_options);
         return dialog;
     }
 
+    /**
+     * ItemDialog generates a dialog materialize modal that acts as a base dialog.
+     * @param {*} options 
+     */
     function ItemDialog(options){
         var self = this;
         var $modal = $('#modal1');
+
+        /**
+         * opens the dialog
+         */
         ItemDialog.prototype.open = () =>{
             $modal.modal('open');
         };
+
+        /**
+         * closes the dialog.
+         */
         ItemDialog.prototype.close = () =>{
             $modal.modal('close');
         };
 
+        /**
+         * onCloseStart is called before a dialog is closed, it removes all the events and resets all the
+         * values of the dialog before closing.
+         */
         ItemDialog.prototype.onCloseStart = () => {
             $modal.find('input').each((id, elem)=>{
                 $(elem).val('');
@@ -260,23 +328,22 @@ function BestSellingBooks(){
             $modal.find('input').removeAttr('readonly');
             $modal.find('input').removeAttr('disabled');
             $modal.find('input').off();
-            $('btn_save').off();
+            
             M.updateTextFields()
         };
 
-        $modal.modal(options);
+        //creates a dialog with passed options.
         var opt = {
             ...options,
             onCloseStart: self.onCloseStart
         }
-        console.log(opt);
-        console.log(options);
         $modal.modal(opt);
     };
-    
 };
 
-
+/**
+ * Creates an instance of BestSellingBooks once the document is loaded.
+ */
 $(() =>{
     var books = new BestSellingBooks();
     books.init();

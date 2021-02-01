@@ -2,7 +2,6 @@ from flask import Flask, render_template
 from pymongo import MongoClient
 from PIL import Image
 import tempfile, os, gridfs
-from model.book import smd_amazon_col
 from views import views
 
 def init_flask_app():
@@ -38,8 +37,10 @@ app = Flask(__name__)
 CONN_STR = 'mongodb+srv://navdb:nav123@cluster0.dnpkj.mongodb.net/?retryWrites=true&w=majority'
 mongo_client = MongoClient(CONN_STR)
 
+# Registers the endpoints defined in the blueprint views
 app.register_blueprint(views)
 
+# initializes the app
 init_flask_app()
 
 app.debug = True

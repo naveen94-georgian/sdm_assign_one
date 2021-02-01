@@ -1,3 +1,4 @@
+<!-- Generates a list of cards for the book data -->
 <div class="grid-container">
     {% for book in books %}
     <div class="grid-item">
@@ -44,6 +45,7 @@
     </div>
 </div>
 <script>
+    //imgError sets a default image in case of a image fetch failure.
     function imgError(image) {
     image.onerror = "";
     image.src = "static/images/other/default.jpg";
